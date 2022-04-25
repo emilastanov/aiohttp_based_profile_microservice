@@ -6,8 +6,8 @@ from app.source.views.educations.methods import name
 def swagger_extension(method):
     @docs(
         tags=[name],
-        summary='Список',
-        description='''Метод для получения списка.''',
+        summary="",
+        description="",
         # parameters=[{
         #     'in': 'header',
         #     'name': 'Authorization',
@@ -18,7 +18,7 @@ def swagger_extension(method):
         responses={
             200: {
                 # 'schema': {},
-                'description': 'Список.'
+                'description': ""
             }
         }
     )

@@ -8,8 +8,8 @@ from app.source.views.schemas import Error
 def swagger_extension(method):
     @docs(
         tags=[name],
-        summary='Создание',
-        description='''Метод создания.''',
+        summary="",
+        description="",
         # parameters=[{
         #     'in': 'header',
         #     'name': 'Authorization',
@@ -20,11 +20,11 @@ def swagger_extension(method):
         responses={
             200: {
                 # 'schema': {},
-                'description': 'Данные.'
+                'description': ""
             },
             400: {
                 'schema': Error,
-                'description': 'Уже существует.'
+                'description': ""
             }
         }
     )

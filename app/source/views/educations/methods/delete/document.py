@@ -15,8 +15,8 @@ class DeleteRequestSchema(Schema):
 def swagger_extension(method):
     @docs(
         tags=[name],
-        summary='Удаление',
-        description='''Метод для удаления.''',
+        summary='',
+        description='',
         # parameters=[{
         #     'in': 'header',
         #     'name': 'Authorization',
@@ -27,7 +27,7 @@ def swagger_extension(method):
         responses={
             202: {
                 'schema': Status,
-                'description': 'Статус процесса удаления.'
+                'description': ''
             }
         }
     )

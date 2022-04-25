@@ -3,6 +3,8 @@ from aiohttp import web
 
 class PostgresAccessor:
     def __init__(self):
+        from app.source.models import Educations
+        self.educations = Educations
         from app.source.models import Profiles
         self.profiles = Profiles
         # Make model in /app/source/models.py and append it here.

@@ -1,8 +1,11 @@
+from datetime import datetime
 from json import JSONDecodeError
+
+import asyncpg
 from aiohttp import web
 
+from app.source.data_formats import INCORRECT_REQUEST_BODY, data_created, EDUCATION_ALREADY_EXIST
 from app.source.views.educations.methods.post.document import swagger_extension
-from app.source.models import *
 
 
 __all__ = ('Handler',)
@@ -21,13 +24,13 @@ class Handler(web.View):
         if request_data:
             try:
                 educations = await self.request.app["db"].educations.create(
-                    institution=request_data['institution'],
-                    type_of_education=request_data['type_of_education'],
-                    description=request_data['description'],
-                    degree=request_data['degree'],
-                    specialization=request_data['specialization'],
-                    file=request_data['file'],
-                    finished_at=request_data['finished_at'],
+                    institution=request_data.get('institution'),
+                    type_of_education=request_data.get('type_of_education'),
+                    description=request_data.get('description'),
+                    degree=request_data.get('degree'),
+                    specialization=request_data.get('specialization'),
+                    file=request_data.get('file'),
+                    finished_at=datetime.strptime(request_data.get('finished_at'), '%Y'),
                 )
 
                 response = data_created({
@@ -38,11 +41,11 @@ class Handler(web.View):
                     'degree': educations.degree,
                     'specialization': educations.degree,
                     'file': educations.file,
-                    'finished_at': educations.finished_at,
+                    'finished_at': str(educations.finished_at),
                 })
 
             except asyncpg.exceptions.UniqueViolationError:
-                response = education_ALREADY_EXIST
+                response = EDUCATION_ALREADY_EXIST
             except KeyError:
                 response = INCORRECT_REQUEST_BODY
         else:

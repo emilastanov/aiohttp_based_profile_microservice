@@ -8,23 +8,16 @@ from app.source.views.schemas import Error
 def swagger_extension(method):
     @docs(
         tags=[name],
-        summary='Создание',
-        description='''Метод создания.''',
-        # parameters=[{
-        #     'in': 'header',
-        #     'name': 'Authorization',
-        #     'description': 'Токен пользователя.',
-        #     'schema': {'type': 'string'},
-        #     'required': 'true'
-        # }],
+        summary='Изменение данных файла',
+        description='''Метод изменения данных файла.''',
         responses={
             200: {
-                # 'schema': {},
-                'description': 'Данные.'
+                'schema': Files,
+                'description': 'Данные файла.'
             },
             400: {
                 'schema': Error,
-                'description': 'Уже существует.'
+                'description': 'Файл уже существует.'
             }
         }
     )

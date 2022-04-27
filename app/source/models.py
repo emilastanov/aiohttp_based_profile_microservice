@@ -13,6 +13,6 @@ class Files(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     link = db.Column(db.String, nullable=False, unique=True)
-    created_at = db.Column(db.Date, nullable=False)
-    updated_at = db.Column(db.Date)
+    created_at = db.Column(db.DateTime, nullable=False)
+    updated_at = db.Column(db.DateTime)
     description = db.Column(db.String)

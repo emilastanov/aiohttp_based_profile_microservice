@@ -8,18 +8,35 @@ from app.source.views.schemas import Error
 def swagger_extension(method):
     @docs(
         tags=[name],
-        summary='Создание',
+        summary='Загрузка файла',
         description='''Метод создания.''',
-        # parameters=[{
-        #     'in': 'header',
-        #     'name': 'Authorization',
-        #     'description': 'Токен пользователя.',
-        #     'schema': {'type': 'string'},
-        #     'required': 'true'
-        # }],
+        parameters=[{
+            'in': 'formData',
+            'name': 'file',
+            'description': 'Файл.',
+            'type': 'file',
+            'required': 'true'
+        }, {
+            'in': 'formData',
+            'name': 'title',
+            'description': 'Название файла.',
+            'type': 'string',
+            'required': 'true'
+        }, {
+            'in': 'formData',
+            'name': 'user_guid',
+            'description': 'GUID пользователя.',
+            'type': 'string',
+            'required': 'true'
+        }, {
+            'in': 'formData',
+            'name': 'description',
+            'description': 'Описание файла.',
+            'type': 'string',
+        }],
         responses={
             200: {
-                # 'schema': {},
+                'schema': Files,
                 'description': 'Данные.'
             },
             400: {
@@ -28,7 +45,6 @@ def swagger_extension(method):
             }
         }
     )
-    @request_schema(Files())
     def extension(*args, **kwargs):
         return method(*args, **kwargs)
 

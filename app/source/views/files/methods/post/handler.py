@@ -23,13 +23,15 @@ class Handler(web.View):
             user_guid = request_data.get('user_guid')
             description = request_data.get('description')
 
+            meta_file_name = int(datetime.now().timestamp()*1000)
+
             status_mk = await make_dir(user_guid)
-            status_file = await save_file(name=f"{user_guid}/{file_name}", file=file)
+            status_file = await save_file(name=f"{user_guid}/{meta_file_name}", file=file)
 
             if status_file == 201:
                 file = await self.request.app["db"].files.create(
                     title=file_name,
-                    link=f"/files?a={user_guid}x0682x{file_name}",
+                    link=f"/files?a={user_guid}x0682x{meta_file_name}",
                     description=description,
                     created_at=datetime.now()
                 )

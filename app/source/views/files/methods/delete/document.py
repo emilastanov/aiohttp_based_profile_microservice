@@ -16,14 +16,7 @@ def swagger_extension(method):
     @docs(
         tags=[name],
         summary='Удаление',
-        description='''Метод для удаления.''',
-        # parameters=[{
-        #     'in': 'header',
-        #     'name': 'Authorization',
-        #     'description': 'Токен пользователя.',
-        #     'schema': {'type': 'string'},
-        #     'required': 'true'
-        # }],
+        description='''Метод для удаления файла.''',
         responses={
             202: {
                 'schema': Status,

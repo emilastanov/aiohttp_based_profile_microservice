@@ -1,23 +1,33 @@
 from aiohttp_apispec import docs
 
 from app.source.views.files.methods import name
+from app.source.views.files.schemas import Files
 
 
 def swagger_extension(method):
     @docs(
         tags=[name],
-        summary='Список',
+        summary='Список файлов | Скачивание файла',
         description='''Метод для получения списка.''',
-        # parameters=[{
-        #     'in': 'header',
-        #     'name': 'Authorization',
-        #     'description': 'Токен пользователя.',
-        #     'schema': {'type': 'string'},
-        #     'required': 'true'
-        # }],
+        parameters=[{
+            'in': 'query',
+            'name': 'a',
+            'description': 'Адрес файла.',
+            'schema': {'type': 'string'},
+        }, {
+            'in': 'query',
+            'name': 'limit',
+            'description': 'Адрес файла.',
+            'schema': {'type': 'integer'},
+        }, {
+            'in': 'query',
+            'name': 'offset',
+            'description': 'Адрес файла.',
+            'schema': {'type': 'integer'},
+        }],
         responses={
             200: {
-                # 'schema': {},
+                'schema': Files,
                 'description': 'Список.'
             }
         }

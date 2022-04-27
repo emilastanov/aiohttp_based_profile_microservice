@@ -913,7 +913,7 @@ def make_object(name: str, idempotent=False) -> None:
              "\n"
              "        if request_data:\n"
              "            try:\n"
-             "                _object = await self.request.app['db'].role.create(\n"
+             f"                _object = await self.request.app['db'].{name.lower()}.create(\n"
              "                    name=request_data['name'],\n"
              "                    title=request_data['title'],\n"
              "                    description=request_data['description']\n"

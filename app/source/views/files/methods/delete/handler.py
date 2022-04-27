@@ -2,7 +2,7 @@ from json import JSONDecodeError
 from aiohttp import web
 
 from app.middlewares.filesystem import delete_file
-from app.source.data_formats import DELETED, INCORRECT_REQUEST_BODY, UNKNOWN_FILE
+from app.source.data_formats import DELETED, INCORRECT_REQUEST_BODY, UNKNOWN_OBJECT
 from app.source.views.files.methods.delete.document import swagger_extension
 from app.source.models import *
 
@@ -32,9 +32,9 @@ class Handler(web.View):
                 if status == status:
                     response = DELETED
                 else:
-                    response = UNKNOWN_FILE
+                    response = UNKNOWN_OBJECT
             else:
-                response = UNKNOWN_FILE
+                response = UNKNOWN_OBJECT
         else:
             response = INCORRECT_REQUEST_BODY
 

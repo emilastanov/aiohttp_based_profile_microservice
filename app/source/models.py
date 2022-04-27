@@ -8,6 +8,7 @@ class Profiles(db.Model):
     __tablename__ = 'profiles'
     id = db.Column(db.Integer, primary_key=True)
 
+
 class Files(db.Model):
     __tablename__ = 'files'
     id = db.Column(db.Integer, primary_key=True)
@@ -16,3 +17,11 @@ class Files(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime)
     description = db.Column(db.String)
+
+
+class Skills(db.Model):
+    __tablename__ = 'skills'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    meta_title = db.Column(db.String, nullable=False)
+    course_id = db.Column(db.Integer)

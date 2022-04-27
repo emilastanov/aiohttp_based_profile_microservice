@@ -4,7 +4,7 @@ import asyncpg
 from aiohttp import web
 
 from app.middlewares.filesystem import save_file, make_dir
-from app.source.data_formats import INCORRECT_REQUEST_BODY, data_created, FILE_ALREADY_EXIST
+from app.source.data_formats import INCORRECT_REQUEST_BODY, data_created, OBJECT_ALREADY_EXIST
 from app.source.views.files.methods.post.document import swagger_extension
 
 
@@ -47,6 +47,6 @@ class Handler(web.View):
             else:
                 response = INCORRECT_REQUEST_BODY
         except asyncpg.exceptions.UniqueViolationError:
-            response = FILE_ALREADY_EXIST
+            response = OBJECT_ALREADY_EXIST
 
         return web.json_response(**response)

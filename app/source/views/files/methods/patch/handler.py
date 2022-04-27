@@ -2,7 +2,7 @@ from datetime import datetime
 from json import JSONDecodeError
 from aiohttp import web
 
-from app.source.data_formats import data_updated, UNKNOWN_FILE, INCORRECT_REQUEST_BODY
+from app.source.data_formats import data_updated, UNKNOWN_OBJECT, INCORRECT_REQUEST_BODY
 from app.source.views.files.methods.patch.document import swagger_extension
 from app.source.models import *
 
@@ -46,7 +46,7 @@ class Handler(web.View):
                     'id': file.id
                 })
             else:
-                response = UNKNOWN_FILE
+                response = UNKNOWN_OBJECT
         else:
             response = INCORRECT_REQUEST_BODY
 

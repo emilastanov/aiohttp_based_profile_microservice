@@ -4,7 +4,7 @@ from json import JSONDecodeError
 import asyncpg
 from aiohttp import web
 
-from app.source.data_formats import INCORRECT_REQUEST_BODY, data_created, EDUCATION_ALREADY_EXIST
+from app.source.data_formats import INCORRECT_REQUEST_BODY, data_created, OBJECT_ALREADY_EXIST
 from app.source.views.educations.methods.post.document import swagger_extension
 
 
@@ -45,8 +45,10 @@ class Handler(web.View):
                 })
 
             except asyncpg.exceptions.UniqueViolationError:
-                response = EDUCATION_ALREADY_EXIST
+                response = OBJECT_ALREADY_EXIST
             except KeyError:
+                response = INCORRECT_REQUEST_BODY
+            except ValueError:
                 response = INCORRECT_REQUEST_BODY
         else:
             response = INCORRECT_REQUEST_BODY

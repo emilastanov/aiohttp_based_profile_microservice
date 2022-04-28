@@ -1,9 +1,9 @@
-from json import JSONDecodeError
 from aiohttp import web
 
+from app.source.data_formats import query_data
 from app.source.views.educations.methods.get.document import swagger_extension
 from app.source.models import *
-
+from app.source.views.educations.schemas import attributes
 
 __all__ = ('Handler', )
 
@@ -13,15 +13,42 @@ class Handler(web.View):
     @swagger_extension
     async def get(self):
 
-        data = await Education.query.gino.all()
+        object_id = self.request.query.get('id')
+        limit = self.request.query.get('limit') or 100
+        offset = self.request.query.get('offset') or 0
 
-        roles = [{
-            "description": education.description,
-            "title": education.title,
-            "name": education.name,
-            "id": education.id,
-        } for education in data]
+        if object_id:
+            data = [await Educations.get(int(object_id))]
+            count = 1
+        else:
+            data = await Educations.__table__.select().limit(limit).offset(offset).gino.all()
+            count = await db.func.count(Educations.id).gino.scalar()
 
-        response = query_data(educations)
+        objects = []
+
+        for _object in data:
+            res = {}
+            for attr in attributes:
+                if attributes[attr]['type'] in ("DATE", "DATETIME", "UUID"):
+                    res[attr] = str(getattr(_object, attr))
+                else:
+                    res[attr] = getattr(_object, attr)
+            objects.append(res)
+
+        if count > 1:
+            response = query_data(
+                objects[0]
+                if object_id else
+                objects,
+                limit=limit,
+                offset=offset,
+                count=count
+            )
+        else:
+            response = query_data(
+                objects[0]
+                if object_id else
+                objects
+            )
 
         return web.json_response(**response)

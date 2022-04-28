@@ -1,6 +1,7 @@
 from json import JSONDecodeError
 from aiohttp import web
 
+from app.source.data_formats import DELETED, UNKNOWN_OBJECT, INCORRECT_REQUEST_BODY
 from app.source.views.educations.methods.delete.document import swagger_extension
 from app.source.models import *
 
@@ -21,13 +22,13 @@ class Handler(web.View):
         if request_data:
             education_id = int(request_data.get('id') or 0)
 
-            education = await Education.get(education_id)
+            education = await Educations.get(education_id)
             if education:
                 await education.delete()
 
                 response = DELETED
             else:
-                response = UNKNOWN_USER_EDUCATION
+                response = UNKNOWN_OBJECT
         else:
             response = INCORRECT_REQUEST_BODY
 

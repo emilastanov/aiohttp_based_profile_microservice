@@ -1,7 +1,8 @@
 from aiohttp_apispec import docs
 
-from app.source.views.educations.schemas import education_list_schema_response
 from app.source.views.educations.methods import name
+from app.source.views.schemas import response_schema
+from app.source.views.educations.schemas import Educations
 
 
 def swagger_extension(method):
@@ -9,16 +10,9 @@ def swagger_extension(method):
         tags=[name],
         summary="List of Education",
         description="""Method for getting a list of educations.""",
-        parameters=[{
-            'in': 'header',
-            'name': 'Authorization',
-            'description': 'User token.',
-            'schema': {'type': 'string'},
-            'required': 'true'
-        }],
         responses={
             200: {
-                "schema": education_list_schema_response,
+                "schema": response_schema(Educations, many=True),
                 "description": "A list of educations."
             }
         }

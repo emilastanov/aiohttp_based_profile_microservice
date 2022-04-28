@@ -1,3 +1,4 @@
+from datetime import datetime
 from json import JSONDecodeError
 from aiohttp import web
 
@@ -10,9 +11,10 @@ __all__ = ('Handler', )
 
 from app.source.data_formats import (
     INCORRECT_REQUEST_BODY,
-    UNKNOWN_USER_ROLE,
+    UNKNOWN_OBJECT,
     data_updated
 )
+from app.source.views.educations.schemas import attributes
 
 
 class Handler(web.View):
@@ -25,33 +27,47 @@ class Handler(web.View):
             request_data = None
 
         if request_data:
-            description = request_data.get('description')
             education_id = int(request_data.get('id') or 0)
-            title = request_data.get('title')
-            name = request_data.get('name')
+            institution = request_data.get('institution')
+            type_of_education = request_data.get('v')
+            degree = request_data.get('degree')
+            specialization = request_data.get('specialization')
+            file = request_data.get('file')
+            description = request_data.get('description')
+            finished_at = request_data.get('finished_at')
 
-            education = await Education.get(education_id)
+            education = await Educations.get(education_id)
 
             if education:
                 new_data = {}
                 if description:
                     new_data["description"] = description
-                if title:
-                    new_data["title"] = title
-                if name:
-                    new_data["name"] = name
+                if institution:
+                    new_data["institution"] = institution
+                if type_of_education:
+                    new_data["type_of_education"] = type_of_education
+                if degree:
+                    new_data["degree"] = degree
+                if specialization:
+                    new_data["specialization"] = specialization
+                if file:
+                    new_data["file"] = file
+                if finished_at:
+                    new_data["finished_at"] = datetime.strptime(finished_at, '%Y'),
 
                 if new_data:
                     await education.update(**new_data).apply()
 
-                response = data_updated({
-                    'description': education.description,
-                    'title': education.title,
-                    'name': education.name,
-                    'id': education.id
-                })
+                response_data = {}
+                for attr in attributes:
+                    if attributes[attr]['type'] in ("DATE", "DATETIME", "UUID"):
+                        response_data[attr] = str(getattr(education, attr))
+                    else:
+                        response_data[attr] = getattr(education, attr)
+                response = data_updated(response_data)
+
             else:
-                response = UNKNOWN_USER_EDUCATION
+                response = UNKNOWN_OBJECT
         else:
             response = INCORRECT_REQUEST_BODY
 

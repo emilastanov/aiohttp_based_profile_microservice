@@ -1,7 +1,7 @@
 from aiohttp_apispec import docs, request_schema
 
 from app.source.views.educations.methods import name
-from app.source.views.educations.schemas import EducationListSchema
+from app.source.views.educations.schemas import Educations
 from app.source.views.schemas import Error
 
 
@@ -28,7 +28,7 @@ def swagger_extension(method):
             }
         }
     )
-    @request_schema(EducationListSchema())
+    @request_schema(Educations())
     def extension(*args, **kwargs):
         return method(*args, **kwargs)
 

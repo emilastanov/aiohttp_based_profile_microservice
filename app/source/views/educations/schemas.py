@@ -1,17 +1,35 @@
 from marshmallow import Schema, fields
 
-from app.source.views.schemas import response_schema
+from app.source.models import Educations as Model
 
 
-class EducationListSchema(Schema):
-    id = fields.Int()
-    institution = fields.Str()
-    type_of_education = fields.Str()
-    degree = fields.Str()
-    specialization = fields.Str()
-    file = fields.Str()
-    description = fields.Str()
-    finished_at = fields.Str()
+attributes = {}
+for attribute in [
+                     key
+                     for key in Model.__dict__.keys()
+                     if '__' not in key
+                 ][:-1]:
+    attributes[attribute] = {
+        'required': not Model
+            .__dict__[attribute]
+            .__dict__['column'].nullable,
+        'type': str(Model
+            .__dict__[attribute]
+            .__dict__['column']
+            .__dict__['type']).upper()
+    }
 
 
-education_list_schema_response = response_schema(EducationListSchema, many=True)
+def make_attributes_of_schema():
+    attr = {}
+    for field in attributes:
+
+        if 'id' in field:
+            attr[field] = fields.Int()
+        else:
+            attr[field] = fields.Str()
+
+    return attr
+
+
+Educations = type('Educations', (Schema,), make_attributes_of_schema())

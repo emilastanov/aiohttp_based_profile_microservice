@@ -1,24 +1,26 @@
 from aiohttp_apispec import docs
 
 from app.source.views.profiles.methods import name
+from app.source.views.schemas import response_schema
+from app.source.views.profiles.schemas import Profiles
 
 
 def swagger_extension(method):
     @docs(
         tags=[name],
-        summary='Список',
-        description='''Метод для получения списка.''',
+        summary='Read',
+        description='''Method for getting list of profiles.''',
         # parameters=[{
         #     'in': 'header',
         #     'name': 'Authorization',
-        #     'description': 'Токен пользователя.',
+        #     'description': 'Access token.',
         #     'schema': {'type': 'string'},
         #     'required': 'true'
         # }],
         responses={
             200: {
-                # 'schema': {},
-                'description': 'Список.'
+                'schema': response_schema(Profiles, many=True),
+                'description': 'List.'
             }
         }
     )

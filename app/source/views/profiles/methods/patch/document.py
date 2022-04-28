@@ -8,23 +8,23 @@ from app.source.views.schemas import Error
 def swagger_extension(method):
     @docs(
         tags=[name],
-        summary='Создание',
-        description='''Метод создания.''',
+        summary='Update',
+        description='''Method for updating profiles.''',
         # parameters=[{
         #     'in': 'header',
         #     'name': 'Authorization',
-        #     'description': 'Токен пользователя.',
+        #     'description': 'Access token.',
         #     'schema': {'type': 'string'},
         #     'required': 'true'
         # }],
         responses={
             200: {
-                # 'schema': {},
-                'description': 'Данные.'
+                'schema': Profiles,
+                'description': 'Data.'
             },
-            400: {
+            404: {
                 'schema': Error,
-                'description': 'Уже существует.'
+                'description': 'Profiles not found.'
             }
         }
     )

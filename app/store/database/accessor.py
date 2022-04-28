@@ -3,16 +3,12 @@ from aiohttp import web
 
 class PostgresAccessor:
     def __init__(self):
+        from app.source.models import Profiles
+        self.profiles = Profiles
         from app.source.models import Skills
         self.skills = Skills
         from app.source.models import Files
         self.files = Files
-        from app.source.models import Profiles
-        self.profiles = Profiles
-        # Make model in /app/source/models.py and append it here.
-        # from app.source.models import Model
-
-        # self.model_name = Model
 
         self.db = None
 

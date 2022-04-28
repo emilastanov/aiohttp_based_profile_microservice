@@ -8,19 +8,15 @@ from app.source.views.schemas import (
 from app.source.views.profiles.methods import name
 
 
-class DeleteRequestSchema(Schema):
-    id = fields.Int()
-
-
 def swagger_extension(method):
     @docs(
         tags=[name],
-        summary='Удаление',
-        description='''Метод для удаления.''',
+        summary='Delete',
+        description='''Method for deleting profiles.''',
         # parameters=[{
         #     'in': 'header',
         #     'name': 'Authorization',
-        #     'description': 'Токен пользователя.',
+        #     'description': 'Access token.',
         #     'schema': {'type': 'string'},
         #     'required': 'true'
         # }],

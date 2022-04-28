@@ -1,12 +1,6 @@
 from sqlalchemy.dialects.postgresql import UUID
-from uuid import uuid4
 
 from app.store.database.models import db
-
-
-class Profiles(db.Model):
-    __tablename__ = 'profiles'
-    id = db.Column(db.Integer, primary_key=True)
 
 
 class Files(db.Model):
@@ -25,3 +19,18 @@ class Skills(db.Model):
     title = db.Column(db.String, nullable=False)
     meta_title = db.Column(db.String, nullable=False)
     course_id = db.Column(db.Integer)
+
+
+class Profiles(db.Model):
+    __tablename__ = 'profiles'
+    id = db.Column(db.Integer, primary_key=True)
+    last_name = db.Column(db.String, nullable=False)
+    first_name = db.Column(db.String, nullable=False)
+    middle_name = db.Column(db.String, nullable=False)
+    registered_at = db.Column(db.DateTime, nullable=False)
+    location = db.Column(db.String, nullable=False)
+    available_for_offers = db.Column(db.Boolean, default="false")
+    date_of_birthday = db.Column(db.Date)
+    sex = db.Column(db.String)
+    guid = db.Column(UUID, nullable=False, unique=True)
+

@@ -14,11 +14,15 @@ class Handler(web.View):
     async def get(self):
 
         object_id = self.request.query.get('id')
+        limit = self.request.query.get('limit') or 100
+        offset = self.request.query.get('offset') or 0
 
-        data = [
-            await Profiles.get(int(object_id))
-        ] if object_id else \
-            await Profiles.query.gino.all()
+        if object_id:
+            data = [await Profiles.get(int(object_id))]
+            count = 1
+        else:
+            data = await Profiles.__table__.select().limit(limit).offset(offset).gino.all()
+            count = await db.func.count(Profiles.id).gino.scalar()
 
         objects = []
 
@@ -31,10 +35,16 @@ class Handler(web.View):
                     res[attr] = getattr(_object, attr)
             objects.append(res)
 
-        response = query_data(
-            objects[0]
-            if object_id else
-            objects
-        )
+        if object_id:
+            response = query_data(
+                objects[0]
+            )
+        else:
+            response = query_data(
+                objects,
+                limit=limit,
+                offset=offset,
+                count=count
+            )
 
         return web.json_response(**response)

@@ -35,20 +35,16 @@ class Handler(web.View):
                     res[attr] = getattr(_object, attr)
             objects.append(res)
 
-        if count > 1:
+        if object_id:
             response = query_data(
                 objects[0]
-                if object_id else
+            )
+        else:
+            response = query_data(
                 objects,
                 limit=limit,
                 offset=offset,
                 count=count
-            )
-        else:
-            response = query_data(
-                objects[0]
-                if object_id else
-                objects
             )
 
         return web.json_response(**response)

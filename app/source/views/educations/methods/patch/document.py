@@ -1,19 +1,19 @@
 from aiohttp_apispec import docs, request_schema
 
 from app.source.views.educations.methods import name
-from app.source.views.educations.schemas import Educations
+from app.source.views.educations.schemas import EducationListSchema
 from app.source.views.schemas import Error
 
 
 def swagger_extension(method):
     @docs(
         tags=[name],
-        summary="",
-        description="",
+        summary="Updating the type of education",
+        description="Method for updating education",
         # parameters=[{
         #     'in': 'header',
         #     'name': 'Authorization',
-        #     'description': 'Токен пользователя.',
+        #     'description': 'User token.',
         #     'schema': {'type': 'string'},
         #     'required': 'true'
         # }],
@@ -28,7 +28,7 @@ def swagger_extension(method):
             }
         }
     )
-    @request_schema(Educations())
+    @request_schema(EducationListSchema())
     def extension(*args, **kwargs):
         return method(*args, **kwargs)
 

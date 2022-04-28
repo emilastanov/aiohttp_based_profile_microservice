@@ -15,19 +15,19 @@ class DeleteRequestSchema(Schema):
 def swagger_extension(method):
     @docs(
         tags=[name],
-        summary='',
-        description='',
-        # parameters=[{
-        #     'in': 'header',
-        #     'name': 'Authorization',
-        #     'description': 'Токен пользователя.',
-        #     'schema': {'type': 'string'},
-        #     'required': 'true'
-        # }],
+        summary="Deletion of Education",
+        description="""Method for deletion of Education""",
+        parameters=[{
+            'in': 'header',
+            'name': 'Authorization',
+            'description': 'User token.',
+            'schema': {'type': 'string'},
+            'required': 'true'
+        }],
         responses={
             202: {
-                'schema': Status,
-                'description': ''
+                "schema": Status,
+                "description": "Status of the education deletion process."
             }
         }
     )

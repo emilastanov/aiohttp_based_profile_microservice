@@ -8,7 +8,7 @@ from app.source.data_formats import INCORRECT_REQUEST_BODY, data_created, EDUCAT
 from app.source.views.educations.methods.post.document import swagger_extension
 
 
-__all__ = ('Handler',)
+all = ('Handler',)
 
 
 class Handler(web.View):

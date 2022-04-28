@@ -12,11 +12,16 @@ class Handler(web.View):
 
     @swagger_extension
     async def get(self):
-        response = {
-            'status': web.HTTPOk.status_code,
-            'data': {
-                'info': 'Get method.'
-            }
-        }
+
+        data = await Education.query.gino.all()
+
+        roles = [{
+            "description": education.description,
+            "title": education.title,
+            "name": education.name,
+            "id": education.id,
+        } for education in data]
+
+        response = query_data(educations)
 
         return web.json_response(**response)

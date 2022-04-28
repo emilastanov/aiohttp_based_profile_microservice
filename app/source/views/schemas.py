@@ -21,3 +21,4 @@ def response_schema(schema, many=False):
 
     Response.__name__ = f'{schema.__name__}ResponseSchema'
     return Response
+

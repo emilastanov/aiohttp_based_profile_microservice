@@ -34,3 +34,14 @@ class Profiles(db.Model):
     sex = db.Column(db.String)
     guid = db.Column(UUID, nullable=False, unique=True)
 
+
+class Educations(db.Model):
+    __tablename__ = 'educations'
+    id = db.Column(db.Integer, primary_key=True)
+    institution = db.Column(db.String, nullable=False)
+    type_of_education = db.Column(db.String, nullable=False)
+    degree = db.Column(db.String)
+    specialization = db.Column(db.String)
+    file = db.Column(db.String)
+    description = db.Column(db.String)
+    finished_at = db.Column(db.Date, nullable=False)

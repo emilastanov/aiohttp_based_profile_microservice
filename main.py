@@ -41,6 +41,6 @@ app = web.Application()
 if __name__ == '__main__':
     setup_app(app)
     try:
-        web.run_app(app, port=config['common']['port'], host='localhost')
+        web.run_app(app, port=config['common']['port'], host='0.0.0.0')
     except OSError:
         print('База данных не подключена! В файле /config/config.yaml необходимо указать адресс базы данных.')

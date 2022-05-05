@@ -7,7 +7,7 @@ from app.source.views.schemas import Error
 
 def swagger_extension(method):
     @docs(
-        tags=[name],
+        tags=[''.join([word.capitalize() for word in name.split('_')])],
         summary="Creating of Education",
         description="""Creation method Education. Data validation is not provided.""",
         responses={

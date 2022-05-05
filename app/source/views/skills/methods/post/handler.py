@@ -1,15 +1,16 @@
-from json import JSONDecodeError
-
 from aiohttp import web
 import asyncpg.exceptions
 
+from app.middlewares.errors import IncorrectBody
+from app.middlewares.objects.response import make_response
+from app.middlewares.objects import create_object
+from app.source.views.skills.methods import name
 from app.source.data_formats import (
     INCORRECT_REQUEST_BODY,
     OBJECT_ALREADY_EXIST,
     data_created
 )
 from app.source.views.skills.methods.post.document import swagger_extension
-
 
 __all__ = ('Handler',)
 
@@ -20,30 +21,15 @@ class Handler(web.View):
     async def post(self):
 
         try:
-            request_data = await self.request.json()
-        except JSONDecodeError:
-            request_data = None
+            _object = await create_object(self.request, name.lower())
 
-        if request_data:
-            try:
-                _object = await self.request.app['db'].skills.create(
-                    meta_title=request_data['meta_title'],
-                    title=request_data['title'],
-                    course_id=request_data.get('course_id')
-                )
+            response = data_created(await make_response(name, _object))
 
-                response = data_created({
-                    'id': _object.id,
-                    'meta_title': _object.meta_title,
-                    'title': _object.title,
-                    'course_id': _object.course_id,
-                })
+        except asyncpg.exceptions.UniqueViolationError:
+            response = OBJECT_ALREADY_EXIST
 
-            except asyncpg.exceptions.UniqueViolationError:
-                response = OBJECT_ALREADY_EXIST
-            except KeyError:
-                response = INCORRECT_REQUEST_BODY
-        else:
+        except IncorrectBody as error:
             response = INCORRECT_REQUEST_BODY
+            response['data']['data']['message'] = str(error)
 
         return web.json_response(**response)

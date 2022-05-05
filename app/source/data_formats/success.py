@@ -16,16 +16,6 @@ SUCCESS = {
 }
 
 
-def verification_code_has_been_sent(data):
-    return {
-        "data": {
-            "status": "ok",
-            "data": data
-        },
-        "status": web.HTTPAccepted.status_code
-    }
-
-
 def query_data(data, **additional_args):
     response = {
         "data": {

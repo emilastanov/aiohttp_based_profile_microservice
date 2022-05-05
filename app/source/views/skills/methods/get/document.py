@@ -7,7 +7,7 @@ from app.source.views.skills.schemas import Skills
 
 def swagger_extension(method):
     @docs(
-        tags=[name],
+        tags=[''.join([word.capitalize() for word in name.split('_')])],
         summary='Read',
         description='''Method for getting list of skills.''',
         parameters=[{

@@ -6,7 +6,7 @@ from app.source.views.files.schemas import Files
 
 def swagger_extension(method):
     @docs(
-        tags=[name],
+        tags=[''.join([word.capitalize() for word in name.split('_')])],
         summary='Список файлов | Скачивание файла',
         description='''Метод для получения списка.''',
         parameters=[{

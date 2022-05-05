@@ -1,9 +1,10 @@
 from aiohttp import web
 
+from app.middlewares.objects import get_object_by_id, get_objects
+from app.middlewares.errors import UnknownObject, NoId
+from app.source.data_formats import query_data, UNKNOWN_OBJECT
 from app.source.views.profiles.methods.get.document import swagger_extension
-from app.source.data_formats import query_data
-from app.source.models import *
-from app.source.views.profiles.schemas import attributes
+from app.source.views.profiles.methods import name
 
 __all__ = ('Handler', )
 
@@ -13,38 +14,15 @@ class Handler(web.View):
     @swagger_extension
     async def get(self):
 
-        object_id = self.request.query.get('id')
-        limit = self.request.query.get('limit') or 100
-        offset = self.request.query.get('offset') or 0
+        try:
+            _object = await get_object_by_id(self.request, name)
+            response = query_data(_object)
 
-        if object_id:
-            data = [await Profiles.get(int(object_id))]
-            count = 1
-        else:
-            data = await Profiles.__table__.select().limit(limit).offset(offset).gino.all()
-            count = await db.func.count(Profiles.id).gino.scalar()
+        except UnknownObject:
+            response = UNKNOWN_OBJECT
 
-        objects = []
-
-        for _object in data:
-            res = {}
-            for attr in attributes:
-                if attributes[attr]['type'] in ("DATE", "DATETIME", "UUID"):
-                    res[attr] = str(getattr(_object, attr))
-                else:
-                    res[attr] = getattr(_object, attr)
-            objects.append(res)
-
-        if object_id:
-            response = query_data(
-                objects[0]
-            )
-        else:
-            response = query_data(
-                objects,
-                limit=limit,
-                offset=offset,
-                count=count
-            )
+        except NoId:
+            objects = await get_objects(self.request, name)
+            response = query_data(**objects)
 
         return web.json_response(**response)

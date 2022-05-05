@@ -3,6 +3,24 @@ from aiohttp import web
 
 class PostgresAccessor:
     def __init__(self):
+        from app.source.models import HobbiesAndCvLink
+        self.hobbies_and_cv_link = HobbiesAndCvLink
+        from app.source.models import SkillsAndCvLink
+        self.skills_and_cv_link = SkillsAndCvLink
+        from app.source.models import DriverLicensesAndCvLink
+        self.driver_licenses_and_cv_link = DriverLicensesAndCvLink
+        from app.source.models import EducationsAndCvLink
+        self.educations_and_cv_link = EducationsAndCvLink
+        from app.source.models import AchievementsAndCvLink
+        self.achievements_and_cv_link = AchievementsAndCvLink
+        from app.source.models import Hobbies
+        self.hobbies = Hobbies
+        from app.source.models import DriverLicense
+        self.driver_license = DriverLicense
+        from app.source.models import Achievements
+        self.achievements = Achievements
+        from app.source.models import UserCv
+        self.user_cv = UserCv
         from app.source.models import Educations
         self.educations = Educations
         from app.source.models import Profiles

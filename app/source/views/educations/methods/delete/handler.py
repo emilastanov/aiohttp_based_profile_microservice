@@ -1,10 +1,14 @@
-from json import JSONDecodeError
 from aiohttp import web
 
-from app.source.data_formats import DELETED, UNKNOWN_OBJECT, INCORRECT_REQUEST_BODY
+from app.middlewares.errors import UnknownObject, IncorrectBody
+from app.source.views.educations.methods import name
 from app.source.views.educations.methods.delete.document import swagger_extension
-from app.source.models import *
-
+from app.middlewares.objects import delete_object
+from app.source.data_formats import (
+    INCORRECT_REQUEST_BODY,
+    UNKNOWN_OBJECT,
+    DELETED
+)
 
 __all__ = ('Handler',)
 
@@ -15,21 +19,14 @@ class Handler(web.View):
     async def delete(self):
 
         try:
-            request_data = await self.request.json()
-        except JSONDecodeError:
-            request_data = None
+            await delete_object(self.request, name, ["id"])
+            response = DELETED
 
-        if request_data:
-            education_id = int(request_data.get('id') or 0)
+        except UnknownObject:
+            response = UNKNOWN_OBJECT
 
-            education = await Educations.get(education_id)
-            if education:
-                await education.delete()
-
-                response = DELETED
-            else:
-                response = UNKNOWN_OBJECT
-        else:
+        except IncorrectBody as error:
             response = INCORRECT_REQUEST_BODY
+            response['data']['data']['message'] = str(error)
 
         return web.json_response(**response)

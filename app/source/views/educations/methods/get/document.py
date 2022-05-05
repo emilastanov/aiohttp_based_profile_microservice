@@ -7,7 +7,7 @@ from app.source.views.educations.schemas import Educations
 
 def swagger_extension(method):
     @docs(
-        tags=[name],
+        tags=[''.join([word.capitalize() for word in name.split('_')])],
         summary="List of Education",
         description="""Method for getting a list of educations.""",
         responses={

@@ -14,7 +14,7 @@ class DeleteRequestSchema(Schema):
 
 def swagger_extension(method):
     @docs(
-        tags=[name],
+        tags=[''.join([word.capitalize() for word in name.split('_')])],
         summary="Deletion of Education",
         description="""Method for deletion of Education""",
         parameters=[{

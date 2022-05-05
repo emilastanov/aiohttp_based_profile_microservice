@@ -1,14 +1,19 @@
-from datetime import datetime
-from json import JSONDecodeError
-
-import asyncpg
 from aiohttp import web
+import asyncpg.exceptions
 
-from app.source.data_formats import INCORRECT_REQUEST_BODY, data_created, OBJECT_ALREADY_EXIST
+from app.middlewares.errors import IncorrectBody
+from app.middlewares.objects.response import make_response
+from app.middlewares.objects import create_object
+from app.source.views.educations.methods import name
+from app.source.views.educations.methods.post.validator import handler as validator
+from app.source.data_formats import (
+    INCORRECT_REQUEST_BODY,
+    OBJECT_ALREADY_EXIST,
+    data_created
+)
 from app.source.views.educations.methods.post.document import swagger_extension
 
-
-all = ('Handler',)
+__all__ = ('Handler',)
 
 
 class Handler(web.View):
@@ -17,40 +22,15 @@ class Handler(web.View):
     async def post(self):
 
         try:
-            request_data = await self.request.json()
-        except JSONDecodeError:
-            request_data = None
+            _object = await create_object(self.request, name.lower(), validator)
 
-        if request_data:
-            try:
-                educations = await self.request.app["db"].educations.create(
-                    institution=request_data.get('institution'),
-                    type_of_education=request_data.get('type_of_education'),
-                    description=request_data.get('description'),
-                    degree=request_data.get('degree'),
-                    specialization=request_data.get('specialization'),
-                    file=request_data.get('file'),
-                    finished_at=datetime.strptime(request_data.get('finished_at'), '%Y'),
-                )
+            response = data_created(await make_response(name, _object))
 
-                response = data_created({
-                    'id': educations.id,
-                    'institution': educations.institution,
-                    'type_of_education': educations.type_of_education,
-                    'description': educations.description,
-                    'degree': educations.degree,
-                    'specialization': educations.degree,
-                    'file': educations.file,
-                    'finished_at': str(educations.finished_at),
-                })
+        except asyncpg.exceptions.UniqueViolationError:
+            response = OBJECT_ALREADY_EXIST
 
-            except asyncpg.exceptions.UniqueViolationError:
-                response = OBJECT_ALREADY_EXIST
-            except KeyError:
-                response = INCORRECT_REQUEST_BODY
-            except ValueError:
-                response = INCORRECT_REQUEST_BODY
-        else:
+        except IncorrectBody as error:
             response = INCORRECT_REQUEST_BODY
+            response['data']['data']['message'] = str(error)
 
         return web.json_response(**response)

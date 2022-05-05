@@ -25,7 +25,8 @@ class Handler(web.View):
         except UnknownObject:
             response = UNKNOWN_OBJECT
 
-        except IncorrectBody:
+        except IncorrectBody as error:
             response = INCORRECT_REQUEST_BODY
+            response['data']['data']['message'] = str(error)
 
         return web.json_response(**response)

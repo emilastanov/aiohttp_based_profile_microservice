@@ -24,8 +24,9 @@ class Handler(web.View):
 
             response = data_updated(await make_response(name, _object))
 
-        except IncorrectBody:
+        except IncorrectBody as error:
             response = INCORRECT_REQUEST_BODY
+            response['data']['data']['message'] = str(error)
 
         except UnknownObject:
             response = UNKNOWN_OBJECT

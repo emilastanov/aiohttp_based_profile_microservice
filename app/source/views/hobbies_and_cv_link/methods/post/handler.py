@@ -28,7 +28,8 @@ class Handler(web.View):
         except asyncpg.exceptions.UniqueViolationError:
             response = OBJECT_ALREADY_EXIST
 
-        except IncorrectBody:
+        except IncorrectBody as error:
             response = INCORRECT_REQUEST_BODY
+            response['data']['data']['message'] = str(error)
 
         return web.json_response(**response)

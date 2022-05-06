@@ -3,7 +3,8 @@
 async def make_conditions(request):
     skills = request.query.get('skills')
     hobbies = request.query.get('hobbies')
-    salary = request.query.get('salary')
+    max_salary = request.query.get('max_salary')
+    min_salary = request.query.get('min_salary')
     wish_position = request.query.get('wish_position')
     driver_license = request.query.get('driver_licenses')
     achievements = request.query.get('achievements')
@@ -21,15 +22,17 @@ async def make_conditions(request):
     if hobbies:
         conditions['hobbies'] = list(map(int, hobbies.split(',')))
     if driver_license:
-        conditions['driver_license'] = list(map(int, driver_license.split(',')))
+        conditions['driver_licenses'] = list(map(int, driver_license.split(',')))
     if achievements:
         conditions['achievements'] = list(map(int, achievements.split(',')))
     if educations:
         conditions['educations'] = list(map(int, educations.split(',')))
     if employments:
         conditions['employments'] = list(map(int, employments.split(',')))
-    if salary:
-        conditions['salary'] = salary
+    if max_salary:
+        conditions['max_salary'] = max_salary
+    if min_salary:
+        conditions['min_salary'] = min_salary
     if wish_position:
         conditions['wish_position'] = wish_position
     if military_duty:

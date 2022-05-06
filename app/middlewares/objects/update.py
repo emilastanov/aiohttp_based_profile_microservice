@@ -1,7 +1,9 @@
+from asyncpg import ForeignKeyViolationError
+
+from app.middlewares.models import get_model_by_name
 from app.middlewares.objects.attributes import get_object_attributes
 from app.middlewares.objects.request import get_request_json_body
 from app.middlewares.errors import UnknownObject
-from app.source import models
 
 
 async def handler(request, model, validator=lambda res: res):
@@ -21,11 +23,14 @@ async def handler(request, model, validator=lambda res: res):
         if request_data[field]:
             update_data[field] = request_data[field]
 
-    _object = await getattr(models, model).get(update_data.pop('id'))
+    _object = await get_model_by_name(model).get(update_data.pop('id'))
 
-    if _object and update_data:
-        await _object.update(**update_data).apply()
-    elif not _object:
+    try:
+        if _object and update_data:
+            await _object.update(**update_data).apply()
+        elif not _object:
+            raise UnknownObject
+    except ForeignKeyViolationError:
         raise UnknownObject
 
     return _object

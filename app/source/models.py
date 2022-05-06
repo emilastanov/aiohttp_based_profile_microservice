@@ -17,7 +17,7 @@ class Skills(db.Model):
     __tablename__ = 'skills'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
-    meta_title = db.Column(db.String, nullable=False)
+    meta_title = db.Column(db.String, nullable=False, unique=True)
     course_id = db.Column(db.Integer)
 
 

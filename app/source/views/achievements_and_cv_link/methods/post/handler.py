@@ -23,7 +23,7 @@ class Handler(web.View):
         try:
             _object = await create_object(self.request, table_name)
 
-            response = data_created(await make_response(model_name, _object))
+            response = data_created(await make_response(table_name, _object))
 
         except asyncpg.exceptions.UniqueViolationError:
             response = OBJECT_ALREADY_EXIST

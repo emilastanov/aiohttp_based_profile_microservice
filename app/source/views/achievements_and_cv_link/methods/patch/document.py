@@ -7,7 +7,7 @@ from app.source.views.schemas import Error
 
 def swagger_extension(method):
     @docs(
-        tags=[model_name],
+        tags=[''.join([word.capitalize() for word in model_name.split('_')])],
         summary='Update',
         description='''Method for updating.achievements_and_cv_link.''',
         # parameters=[{

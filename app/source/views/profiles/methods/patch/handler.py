@@ -5,6 +5,7 @@ from app.middlewares.objects.response import make_response
 from app.source.views.profiles.methods import name
 from app.source.views.profiles.methods.patch.document import swagger_extension
 from app.middlewares.objects import update_object
+from app.source.views.profiles.methods.post.validator import handler as validator
 
 __all__ = ('Handler', )
 
@@ -21,7 +22,7 @@ class Handler(web.View):
     @swagger_extension
     async def patch(self):
         try:
-            _object = await update_object(self.request, name)
+            _object = await update_object(self.request, name, validator)
 
             response = data_updated(await make_response(name, _object))
 

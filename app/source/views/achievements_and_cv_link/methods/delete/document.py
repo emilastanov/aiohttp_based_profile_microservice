@@ -10,7 +10,7 @@ from app.source.views.achievements_and_cv_link.methods import model_name
 
 def swagger_extension(method):
     @docs(
-        tags=[model_name],
+        tags=[''.join([word.capitalize() for word in model_name.split('_')])],
         summary='Delete',
         description='''Method for deleting.achievements_and_cv_link.''',
         # parameters=[{

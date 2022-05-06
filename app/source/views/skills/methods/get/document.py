@@ -13,7 +13,18 @@ def swagger_extension(method):
         parameters=[{
             'in': 'query',
             'name': 'id',
-            'description': 'Object identity number.',
+            'description': 'Object id.',
+            'schema': {'type': 'string'},
+        }, {
+            'in': 'query',
+            'name': 'limit',
+            'description': 'Limit of object in response.',
+            'schema': {'type': 'string'},
+        }, {
+            'in': 'query',
+            'name': 'offset',
+            'description': 'Offset of object in response.',
+            'schema': {'type': 'string'},
         }],
         responses={
             200: {

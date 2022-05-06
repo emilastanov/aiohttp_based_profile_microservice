@@ -4,10 +4,17 @@ from app.middlewares.errors import UnknownObject
 from app.source import models
 
 
-async def handler(request, model):
+async def handler(request, model, validator=lambda res: res):
     attributes = get_object_attributes(model)
 
-    request_data = await get_request_json_body(request, attributes, get_object_id=True, use_require_fields=False)
+    request_data = validator(
+        await get_request_json_body(
+            request,
+            attributes,
+            get_object_id=True,
+            use_require_fields=False
+        )
+    )
 
     update_data = {}
     for field in request_data:

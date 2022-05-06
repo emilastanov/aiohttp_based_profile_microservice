@@ -10,7 +10,7 @@ from app.source.views.hobbies_and_cv_link.methods import name
 
 def swagger_extension(method):
     @docs(
-        tags=[name],
+        tags=[''.join([word.capitalize() for word in name.split('_')])],
         summary='Delete',
         description='''Method for deleting hobbies_and_cv_link.''',
         # parameters=[{

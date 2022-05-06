@@ -39,7 +39,7 @@ class UserCv(db.Model):
     __tablename__ = 'user_cv'
     id = db.Column(db.Integer, primary_key=True)
     about_me = db.Column(db.String)
-    employment = db.Column(db.String,  default="full")
+    employments = db.Column(db.String,  default="full")
     avatar = db.Column(db.Integer, db.ForeignKey('files.id', ondelete='CASCADE'))
     wish_position = db.Column(db.String)
     possibility_of_moving = db.Column(db.Boolean, default="false")
@@ -47,6 +47,7 @@ class UserCv(db.Model):
     work_format = db.Column(db.String)
     wish_salary = db.Column(db.Integer)
     marital_status = db.Column(db.String)
+    profile = db.Column(db.Integer, db.ForeignKey('profiles.id', ondelete='CASCADE'), nullable=False)
 
 
 class Achievements(db.Model):
@@ -55,7 +56,6 @@ class Achievements(db.Model):
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
     file = db.Column(db.Integer, db.ForeignKey('files.id', ondelete='CASCADE'))
-    profile = db.Column(db.Integer, db.ForeignKey('profiles.id', ondelete='CASCADE'))
 
 
 class DriverLicense(db.Model):
@@ -63,7 +63,6 @@ class DriverLicense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
-    profile = db.Column(db.Integer, db.ForeignKey('profiles.id', ondelete='CASCADE'))
 
 
 class Hobbies(db.Model):
@@ -71,7 +70,6 @@ class Hobbies(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
-    profile = db.Column(db.Integer, db.ForeignKey('profiles.id', ondelete='CASCADE'))
 
 
 class Educations(db.Model):
@@ -84,7 +82,6 @@ class Educations(db.Model):
     file = db.Column(db.Integer, db.ForeignKey('files.id', ondelete='CASCADE'))
     description = db.Column(db.String)
     finished_at = db.Column(db.Date, nullable=False)
-    profile = db.Column(db.Integer, db.ForeignKey('profiles.id', ondelete='CASCADE'))
 
 
 class AchievementsAndCvLink(db.Model):
@@ -119,4 +116,26 @@ class HobbiesAndCvLink(db.Model):
     __tablename__ = 'hobbies_and_cv_link'
     id = db.Column(db.Integer, primary_key=True)
     hobby = db.Column(db.Integer, db.ForeignKey('hobbies.id', ondelete='CASCADE'), nullable=False)
+    cv = db.Column(db.Integer, db.ForeignKey('user_cv.id', ondelete='CASCADE'), nullable=False)
+
+
+class Employments(db.Model):
+    __tablename__ = 'employments'
+    id = db.Column(db.Integer, primary_key=True)
+    started_at = db.Column(db.Date, nullable=False)
+    finished_at = db.Column(db.Date)
+    until_now = db.Column(db.Boolean, default='false')
+    title = db.Column(db.String, nullable=False)
+    region = db.Column(db.String)
+    position = db.Column(db.String, nullable=False)
+    specialization_of_company = db.Column(db.String, nullable=False)
+    web_site = db.Column(db.String)
+    description = db.Column(db.String, nullable=False)
+    reason_for_dismissal = db.Column(db.String)
+
+
+class EmploymentsAndCvLink(db.Model):
+    __tablename__ = 'employments_and_cv_link'
+    id = db.Column(db.Integer, primary_key=True)
+    employment = db.Column(db.Integer, db.ForeignKey('employments.id', ondelete='CASCADE'), nullable=False)
     cv = db.Column(db.Integer, db.ForeignKey('user_cv.id', ondelete='CASCADE'), nullable=False)

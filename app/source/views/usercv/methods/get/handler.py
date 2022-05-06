@@ -15,6 +15,9 @@ from app.source.views.skills.methods import name as SKILLS
 from app.source.views.skills_and_cv_link.methods import name as SKILLS_AND_CV_LINK
 from app.source.views.hobbies.methods import name as HOBBIES
 from app.source.views.hobbies_and_cv_link.methods import name as HOBBIES_AND_CV_LINK
+from app.source.views.employments.methods import name as EMPLOYMENTS
+from app.source.views.employments_and_cv_link.methods import name as EMPLOYMENTS_AND_CV_LINK
+from app.source.views.profiles.methods import name as PROFILES
 from app.source.models import (
     Educations,
     EducationsAndCvLink,
@@ -25,7 +28,10 @@ from app.source.models import (
     Skills,
     SkillsAndCvLink,
     Hobbies,
-    HobbiesAndCvLink
+    HobbiesAndCvLink,
+    Employments,
+    EmploymentsAndCvLink,
+    Profiles
 )
 
 
@@ -73,6 +79,16 @@ class Handler(web.View):
             await enrich_data(
                 _object, HOBBIES, Hobbies, HOBBIES_AND_CV_LINK, HobbiesAndCvLink, 'hobby'
             )
+            await enrich_data(
+                _object, EMPLOYMENTS, Employments, EMPLOYMENTS_AND_CV_LINK, EmploymentsAndCvLink, 'employment'
+            )
+
+            profile = await get_objects(
+                None,
+                model_name=PROFILES,  # EDUCATIONS_AND_CV_LINK,
+                condition=Profiles.id == _object['profile']  # EducationsAndCvLink.cv == _object['id']
+            )
+            _object['profile'] = profile['data'][0]
 
             response = query_data(_object)
 
@@ -80,7 +96,7 @@ class Handler(web.View):
             response = UNKNOWN_OBJECT
 
         except NoId:
-            objects = await get_objects(self.request, table_name)
+            objects = await get_objects(self.request, table_name, linked_table_name=PROFILES)
             response = query_data(**objects)
 
         return web.json_response(**response)

@@ -4,6 +4,7 @@ from app.middlewares.errors import UnknownObject, IncorrectBody
 from app.middlewares.objects.response import make_response
 from app.source.views.educations.methods import name
 from app.source.views.educations.methods.patch.document import swagger_extension
+from app.source.views.educations.methods.post.validator import handler as validator
 from app.middlewares.objects import update_object
 from app.source.data_formats import (
     INCORRECT_REQUEST_BODY,
@@ -20,7 +21,7 @@ class Handler(web.View):
     @swagger_extension
     async def patch(self):
         try:
-            _object = await update_object(self.request, name)
+            _object = await update_object(self.request, name, validator)
 
             response = data_updated(await make_response(name, _object))
 

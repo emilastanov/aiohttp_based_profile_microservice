@@ -7,7 +7,7 @@ from app.source.views.employments_and_cv_link.schemas import EmploymentsAndCvLin
 
 def swagger_extension(method):
     @docs(
-        tags=[name],
+        tags=[''.join([word.capitalize() for word in name.split('_')])],
         summary='Read',
         description='''Method for getting list of employments_and_cv_link.''',
         # parameters=[{

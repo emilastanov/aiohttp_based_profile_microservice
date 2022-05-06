@@ -28,7 +28,7 @@ async def filter_cv(params: dict, limit=100, offset=0):
     if params.get('marital_status'):
         conditions.append('cv.marital_status = :marital_status')
     if params.get('wish_position'):
-        conditions.append('cv.wish_position = :wish_position')
+        conditions.append('cv.wish_position ~ :wish_position')
 
     query_text = (
         "SELECT\n"

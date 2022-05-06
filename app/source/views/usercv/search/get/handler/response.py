@@ -25,7 +25,7 @@ async def make_cv_query_response(cv_data):
             "data": beautify_data,
             "limit": int(limit),
             "offset": int(offset),
-            "count": int(count)
+            "count": int(count or 0)
         }
     }
 
